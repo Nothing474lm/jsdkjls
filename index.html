@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Portfolio Architect: Construye tu Marca Profesional</title>
+  
+  <!-- TailwindCSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  
+  <!-- Fuentes: Playfair Display (Serif) & Inter (Sans-Serif) -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- React y Babel -->
+  <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  
+  <style>
+    body { font-family: 'Inter', sans-serif; background-color: #f8f9fa; color: #1c1c1c; }
+    h1, h2, h3, h4, .font-serif { font-family: 'Playfair Display', serif; }
+    .fade-in { animation: fadeIn 0.4s ease-out forwards; }
+    .fade-out { animation: fadeOut 0.4s ease-in forwards; }
+    .scale-in { animation: scaleIn 0.4s cubic-bezier(0.165, 0.84, 0.44, 1) forwards; }
+    .scale-out { animation: scaleOut 0.4s cubic-bezier(0.755, 0.05, 0.855, 0.06) forwards; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes fadeOut { from { opacity: 1; transform: translateY(0); } to { opacity: 0; transform: translateY(10px); } }
+    @keyframes scaleIn { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
+    @keyframes scaleOut { from { opacity: 1; transform: scale(1); } to { opacity: 0; transform: scale(0.9); } }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+
+  <script type="text/babel">
+    const { useState, useEffect, useRef } = React;
+
+    // =============== LABORATORIOS FUNCIONALES ===============
+    const StrategyLab = () => {
+        const [puv, setPuv] = useState({ client: '', result: '', skill: '' });
+        const handleChange = (e) => setPuv({ ...puv, [e.target.name]: e.target.value });
+        const fullPuv = `Ayudo a ${puv.client || '[tu cliente ideal]'} a lograr ${puv.result || '[resultado deseado]'} a traves de ${puv.skill || '[tu habilidad unica]'}.`;
+        return (
+            <div className="p-6 h-full flex flex-col">
+                <h4 className="font-semibold text-center mb-4">Constructor de PUV</h4>
+                <div className="space-y-3 text-sm">
+                    <input type="text" name="client" value={puv.client} onChange={handleChange} placeholder="Cliente Ideal (ej. startups de cafe)" className="w-full p-2 border rounded-md" />
+                    <input type="text" name="result" value={puv.result} onChange={handleChange} placeholder="Resultado (ej. aumentar ventas online)" className="w-full p-2 border rounded-md" />
+                    <input type="text" name="skill" value={puv.skill} onChange={handleChange} placeholder="Habilidad Unica (ej. diseno de packaging)" className="w-full p-2 border rounded-md" />
+                </div>
+                <div className="mt-4 pt-4 border-t text-sm bg-gray-100 p-3 rounded-md flex-grow">
+                    <p className="font-semibold">Tu Propuesta Unica de Valor:</p>
+                    <p className="mt-1 text-blue-600">{fullPuv}</p>
+                </div>
+            </div>
+        );
+    };
+
+    const CurationLab = () => {
+        const [projects, setProjects] = useState([{ id: 1, name: '', quality: 3, relevance: 3 }]);
+        const addProject = () => setProjects([...projects, { id: Date.now(), name: '', quality: 3, relevance: 3 }]);
+        const updateProject = (id, field, value) => {
+            setProjects(projects.map(p => p.id === id ? { ...p, [field]: value } : p));
+        };
+        return (
+            <div className="p-6 h-full flex flex-col">
+                <h4 className="font-semibold text-center mb-4">Auditor de Proyectos</h4>
+                <div className="space-y-2 text-sm overflow-y-auto pr-2 flex-grow">
+                    {projects.map(p => (
+                        <div key={p.id} className="grid grid-cols-3 gap-2 items-center">
+                            <input type="text" value={p.name} onChange={e => updateProject(p.id, 'name', e.target.value)} placeholder="Nombre del Proyecto" className="col-span-3 p-2 border rounded-md" />
+                            <label>Calidad: {p.quality}</label>
+                            <input type="range" min="1" max="5" value={p.quality} onChange={e => updateProject(p.id, 'quality', e.target.value)} className="col-span-2" />
+                            <label>Relevancia: {p.relevance}</label>
+                            <input type="range" min="1" max="5" value={p.relevance} onChange={e => updateProject(p.id, 'relevance', e.target.value)} className="col-span-2" />
+                        </div>
+                    ))}
+                </div>
+                <button onClick={addProject} className="mt-4 text-sm font-semibold text-blue-600">+ Añadir otro proyecto</button>
+            </div>
+        );
+    };
+
+    const CaseStudyLab = () => {
+      return (
+        <div className="p-6 h-full flex flex-col">
+            <h4 className="font-semibold text-center mb-4">Estructurador de Estudio de Caso</h4>
+            <div className="space-y-2 text-sm flex-grow flex flex-col">
+                <textarea placeholder="1. El Problema: El cliente necesitaba..." className="w-full p-2 border rounded-md flex-grow"></textarea>
+                <textarea placeholder="2. Mi Proceso: Investigue, bocete, disené..." className="w-full p-2 border rounded-md flex-grow"></textarea>
+                <textarea placeholder="3. La Solucion: Presente un sistema visual que..." className="w-full p-2 border rounded-md flex-grow"></textarea>
+                <textarea placeholder="4. Los Resultados: Logramos un aumento del X% en..." className="w-full p-2 border rounded-md flex-grow"></textarea>
+            </div>
+        </div>
+      );
+    };
+    
+    const PresentationLab = () => {
+        const [layout, setLayout] = useState('grid');
+        return (
+            <div className="p-6 h-full flex flex-col items-center">
+                <h4 className="font-semibold text-center mb-4">Simulador de Layout</h4>
+                <div className="w-full flex-grow bg-gray-200 rounded-md p-2">
+                    {layout === 'grid' && (
+                        <div className="grid grid-cols-2 gap-2 h-full">
+                            {[...Array(4)].map((_, i) => <div key={i} className="bg-gray-400 rounded"></div>)}
+                        </div>
+                    )}
+                    {layout === 'list' && (
+                        <div className="space-y-2 h-full">
+                            {[...Array(3)].map((_, i) => <div key={i} className="bg-gray-400 rounded h-1/3"></div>)}
+                        </div>
+                    )}
+                </div>
+                <div className="flex gap-2 mt-4">
+                    <button onClick={() => setLayout('grid')} className={`p-2 rounded-md ${layout === 'grid' ? 'bg-black text-white' : 'hover:bg-gray-200'}`}><i data-lucide="layout-grid" className="w-5 h-5"></i></button>
+                    <button onClick={() => setLayout('list')} className={`p-2 rounded-md ${layout === 'list' ? 'bg-black text-white' : 'hover:bg-gray-200'}`}><i data-lucide="list" className="w-5 h-5"></i></button>
+                </div>
+            </div>
+        );
+    };
+
+    // =============== DATOS DE LA APLICACIÓN ===============
+    const modules = [
+      {
+        id: 'estrategia',
+        icon: 'compass',
+        title: "Estrategia del Portafolio",
+        subtitle: "Define tu norte profesional.",
+        description: "Tu portafolio no es un álbum de recortes, es tu principal herramienta de marketing. Antes de diseñar una sola página, necesitas una estrategia clara: ¿A quién quieres atraer y qué quieres que piensen de ti?",
+        keyConcepts: ["Definición de Nicho", "Análisis de Audiencia (Reclutadores vs. Clientes)", "Propuesta Única de Valor (PUV)", "Objetivos del Portafolio"],
+        practice: {
+          deepDive: "La PUV es lo que te hace diferente. No es suficiente decir 'soy diseñador gráfico'. ¿Eres 'el diseñador que ayuda a startups de tecnología a lanzar su producto con una identidad visual impactante en menos de 30 días'? Esa especificidad atrae a los clientes correctos y repele a los incorrectos, ahorrándote tiempo.",
+          exercise: "Escribe en una sola frase tu Propuesta Única de Valor. Empieza con 'Ayudo a [tu cliente ideal] a lograr [resultado deseado] a través de [tu habilidad única]'.",
+          Task: () => <textarea placeholder="Ayudo a..." className="w-full h-24 p-2 border rounded-md text-sm bg-white"></textarea>
+        },
+        LabComponent: StrategyLab
+      },
+      {
+        id: 'curacion',
+        icon: 'archive',
+        title: "Curación de Proyectos",
+        subtitle: "Calidad sobre cantidad, siempre.",
+        description: "Eres tan bueno como tu peor proyecto. La curación es el proceso de seleccionar solo tus trabajos más fuertes, relevantes y representativos. Un portafolio con 5 proyectos excelentes es infinitamente mejor que uno con 20 mediocres.",
+        keyConcepts: ["Criterios de Selección", "El Principio de Relevancia", "Diversidad vs. Especialización", "Proyectos Personales Estratégicos"],
+        practice: {
+          deepDive: "Si no tienes suficientes proyectos 'reales' que se alineen con tu nicho, crea proyectos personales. ¿Quieres trabajar con marcas de café? Diseña la identidad completa para una marca de café ficticia. Esto demuestra proactividad, pasión y la habilidad exacta que quieres vender.",
+          exercise: "Haz una lista de todos tus proyectos. Califícalos del 1 al 5 en dos categorías: Calidad del resultado final y Relevancia para tu cliente ideal. Descarta todo lo que no tenga al menos un 4 en ambas.",
+          Task: () => <p className="text-sm text-gray-600"><i>Usa una hoja de cálculo o un papel para hacer este ejercicio de auditoría.</i></p>
+        },
+        LabComponent: CurationLab
+      },
+      {
+        id: 'case-studies',
+        icon: 'book-text',
+        title: "Estudios de Caso",
+        subtitle: "El corazón de tu portafolio.",
+        description: "Las imágenes bonitas atraen, pero las historias venden. Un estudio de caso narra el proceso detrás de tu trabajo, demostrando no solo tu habilidad técnica, sino tu pensamiento estratégico. Es lo que separa a los amateurs de los profesionales.",
+        keyConcepts: ["Estructura (Problema, Proceso, Solución)", "Mostrando el 'Porqué'", "Cuantificando Resultados", "Storytelling Visual"],
+        practice: {
+          deepDive: "La sección más importante y la que más se omite es 'Resultados'. ¿Cómo impactó tu diseño en el negocio del cliente? ¿Aumentaron las ventas un 15%? ¿Mejoró la tasa de conversión un 20%? ¿Creció el engagement en redes? Cuantificar tu impacto te convierte en un socio estratégico, no en un simple ejecutor.",
+          exercise: "Elige uno de tus proyectos y escribe un borrador de estudio de caso siguiendo la estructura: 1. El Problema (El desafío del cliente). 2. Mi Proceso (Cómo lo abordaste). 3. La Solución (El diseño final). 4. Los Resultados (El impacto medible).",
+          Task: () => <textarea placeholder="1. El Problema: El cliente necesitaba..." className="w-full h-32 p-2 border rounded-md text-sm bg-white"></textarea>
+        },
+        LabComponent: CaseStudyLab
+      },
+      {
+        id: 'presentacion',
+        icon: 'layout-template',
+        title: "Presentación Visual",
+        subtitle: "El diseño de tu propio marketing.",
+        description: "El diseño de tu portafolio es, en sí mismo, tu proyecto más importante. Debe reflejar tu estilo, tu atención al detalle y tu habilidad para crear una experiencia de usuario impecable. Es la prueba de que puedes hacer lo que dices que haces.",
+        keyConcepts: ["Jerarquía Visual", "Tipografía y Legibilidad", "Uso de Espacio en Blanco", "Navegación Intuitiva", "Diseño Responsivo"],
+        practice: {
+          deepDive: "El error más común es sobre-diseñar. Tu portafolio debe ser un escenario elegante y neutral que haga brillar tus proyectos, no que compita con ellos. Usa una paleta de colores limitada, una tipografía legible y mucho espacio en blanco para que el contenido respire.",
+          exercise: "Visita los portafolios de tres diseñadores que admires. ¿Qué tienen en común en cuanto a layout, tipografía y navegación? ¿Qué decisiones de diseño hacen que la experiencia sea agradable y fácil de usar?",
+          Task: () => <p className="text-sm text-gray-600"><i>Abre nuevas pestañas y analiza. Anota tus hallazgos.</i></p>
+        },
+        LabComponent: PresentationLab
+      }
+    ];
+
+    // =============== COMPONENTES ===============
+    const PracticeModal = ({ module, onClose }) => {
+        const [closing, setClosing] = useState(false);
+        const { practice } = module;
+        const PracticeTask = practice.Task;
+
+        const handleClose = () => {
+            setClosing(true);
+            setTimeout(onClose, 300);
+        };
+        
+        useEffect(() => {
+            const handleKeyDown = (e) => e.key === 'Escape' && handleClose();
+            window.addEventListener('keydown', handleKeyDown);
+            return () => window.removeEventListener('keydown', handleKeyDown);
+        }, []);
+
+        return (
+            <div onClick={handleClose} className={`fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4 ${closing ? 'fade-out' : 'fade-in'}`}>
+                <div onClick={e => e.stopPropagation()} className={`bg-white rounded-xl shadow-2xl w-full max-w-2xl max-h-[90vh] flex flex-col ${closing ? 'scale-out' : 'scale-in'}`}>
+                    <header className="p-6 flex justify-between items-center border-b border-gray-200">
+                        <div className="flex items-center">
+                            <i data-lucide={module.icon} className="w-7 h-7 mr-4 text-black"></i>
+                            <h3 className="text-2xl font-bold font-serif">{module.title}</h3>
+                        </div>
+                        <button onClick={handleClose} className="p-2 rounded-full text-gray-500 hover:bg-gray-100"><i data-lucide="x" className="w-6 h-6"></i></button>
+                    </header>
+                    <main className="p-6 overflow-y-auto">
+                        <div className="mb-6">
+                            <h4 className="font-semibold text-lg mb-2 text-gray-800">Analisis Profundo</h4>
+                            <p className="text-gray-600 leading-relaxed">{practice.deepDive}</p>
+                        </div>
+                        <div>
+                            <h4 className="font-semibold text-lg mb-2 text-gray-800">Ejercicio Practico</h4>
+                            <p className="text-gray-600 leading-relaxed mb-4">{practice.exercise}</p>
+                            <div className="bg-gray-50 border border-gray-200 rounded-lg p-4">
+                                <PracticeTask />
+                            </div>
+                        </div>
+                    </main>
+                </div>
+            </div>
+        );
+    };
+
+    const BrandingProApp = () => {
+      const [currentModule, setCurrentModule] = useState(modules[0]);
+      const [isAnimating, setIsAnimating] = useState(false);
+      const [practiceModalModule, setPracticeModalModule] = useState(null);
+
+      const selectModule = (module) => {
+        if (module.id !== currentModule.id) {
+          setIsAnimating(true);
+          setTimeout(() => {
+            setCurrentModule(module);
+            setIsAnimating(false);
+          }, 300);
+        }
+      };
+
+      useEffect(() => {
+        lucide.createIcons();
+      }, [currentModule, practiceModalModule]);
+
+      const LabComponent = currentModule.LabComponent;
+
+      return (
+        <div className="min-h-screen bg-gray-50">
+          {practiceModalModule && <PracticeModal module={practiceModalModule} onClose={() => setPracticeModalModule(null)} />}
+          
+          <header className="fixed w-full top-0 bg-white/80 backdrop-blur-lg border-b border-gray-200 z-30">
+            <nav className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+              <h1 className="text-2xl font-bold font-serif">Portfolio Architect</h1>
+              <div className="hidden md:flex items-center space-x-6">
+                <a href="#fundamentos" className="text-sm font-medium text-gray-600 hover:text-black">Fundamentos</a>
+                <a href="#referencia" className="text-sm font-medium text-gray-600 hover:text-black">Referencia</a>
+                <a href="#comunicacion" className="text-sm font-medium text-gray-600 hover:text-black">Comunicacion</a>
+                <a href="#plataformas" className="text-sm font-medium text-gray-600 hover:text-black">Plataformas</a>
+                <a href="#promocion" className="text-sm font-medium text-gray-600 hover:text-black">Promocion</a>
+              </div>
+            </nav>
+          </header>
+
+          <main className="pt-24">
+            {/* Sección de Fundamentos (Interactiva) */}
+            <section id="fundamentos" className="py-20 px-6">
+              <div className="max-w-7xl mx-auto">
+                <div className="text-center max-w-3xl mx-auto mb-16">
+                    <h2 className="text-4xl md:text-5xl font-bold font-serif mb-4">Construye tu Marca Profesional</h2>
+                    <p className="text-lg text-gray-600">Una guia completa para crear un portafolio de diseño que atraiga oportunidades y demuestre tu valor estrategico.</p>
+                </div>
+
+                <div className="flex flex-col md:flex-row gap-10 lg:gap-16">
+                  {/* Navegación de Módulos */}
+                  <div className="md:w-1/3">
+                    <div className="space-y-3 sticky top-24">
+                      {modules.map((module) => (
+                        <button 
+                          key={module.id} 
+                          onClick={() => selectModule(module)}
+                          className={`w-full p-4 border rounded-lg transition-all duration-300 text-left flex items-start gap-4 ${ currentModule.id === module.id ? 'bg-black text-white border-black shadow-lg' : 'bg-white hover:border-gray-400'}`}
+                        >
+                          <i data-lucide={module.icon} className="w-7 h-7 mt-1 flex-shrink-0"></i>
+                          <div>
+                            <span className="font-semibold text-lg">{module.title}</span>
+                            <p className={`text-sm transition-colors ${currentModule.id === module.id ? 'text-gray-300' : 'text-gray-500'}`}>{module.subtitle}</p>
+                          </div>
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Contenido del Módulo */}
+                  <div className={`md:w-2/3 transition-opacity duration-300 ${isAnimating ? 'opacity-0' : 'opacity-100'}`}>
+                    <div className="bg-white p-8 rounded-xl border border-gray-200 shadow-sm">
+                        <h3 className="text-3xl font-bold font-serif mb-4">{currentModule.title}</h3>
+                        <p className="text-gray-700 mb-6 leading-relaxed">{currentModule.description}</p>
+                        
+                        <h4 className="font-semibold mb-3">Conceptos Clave:</h4>
+                        <div className="flex flex-wrap gap-2 mb-8">
+                            {currentModule.keyConcepts.map(concept => (
+                                <span key={concept} className="bg-gray-100 text-gray-700 text-xs font-medium px-3 py-1 rounded-full">{concept}</span>
+                            ))}
+                        </div>
+                        
+                        <div className="bg-gray-50 rounded-lg border border-gray-200 h-80">
+                            <LabComponent />
+                        </div>
+
+                        <button onClick={() => setPracticeModalModule(currentModule)} className="mt-6 w-full px-4 py-3 bg-black text-white rounded-lg hover:bg-gray-800 transition-all text-sm font-semibold flex items-center justify-center gap-2">
+                            <span>Iniciar Practica del Modulo</span>
+                            <i data-lucide="arrow-right" className="w-4 h-4"></i>
+                        </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            {/* SECCIÓN: REFERENCIA Y EJEMPLO */}
+            <section id="referencia" className="py-20 px-6 bg-gray-800 text-white">
+                <div className="max-w-4xl mx-auto">
+                    <div className="text-center mb-16">
+                        <h2 className="text-4xl font-bold font-serif mb-4">Referencia: Un Portafolio Ejemplar</h2>
+                        <p className="text-lg text-gray-400">Asi es como se ve un estudio de caso profesional. No solo muestres el resultado, cuenta la historia y demuestra el valor.</p>
+                    </div>
+                    <div className="bg-white text-black rounded-xl shadow-2xl p-8">
+                        <h3 className="text-3xl font-bold font-serif">Solana Coffee: Rebranding para un Mercado Premium</h3>
+                        <p className="text-sm text-gray-500 mt-2">Diseño de Identidad Visual, Packaging, Estrategia de Marca</p>
+                        <div className="w-full h-64 bg-yellow-200 rounded-lg my-6 flex items-center justify-center"><p className="text-yellow-800 font-semibold">[Aqui iria una imagen heroica del producto]</p></div>
+                        
+                        <div className="space-y-6">
+                            <div>
+                                <h4 className="font-bold text-lg mb-2">1. El Problema</h4>
+                                <p className="text-gray-700 text-sm">Solana Coffee, una marca local con un producto excelente, no lograba conectar con un publico dispuesto a pagar un precio premium. Su identidad visual se sentia generica y no comunicaba la calidad artesanal de su cafe.</p>
+                            </div>
+                             <div>
+                                <h4 className="font-bold text-lg mb-2">2. Mi Proceso y Solucion</h4>
+                                <p className="text-gray-700 text-sm">Realice un analisis de competidores y defini un territorio de marca enfocado en 'el lujo de la calma'. Propuse un rebranding completo con un nuevo logo, una paleta de colores calida y una tipografia serif elegante. El diseno del empaque utiliza ilustraciones botanicas para evocar el origen natural del producto.</p>
+                            </div>
+                             <div>
+                                <h4 className="font-bold text-lg mb-2">3. Los Resultados</h4>
+                                <p className="text-gray-700 text-sm">Tras el lanzamiento, Solana Coffee logro entrar en 3 nuevas cadenas de tiendas gourmet y reporto un <strong>aumento del 40% en ventas online</strong> en el primer trimestre. El nuevo diseno fue clave para justificar un aumento de precio del 15%.</p>
+                            </div>
+                        </div>
+                    </div>
+                     <div className="mt-12 bg-gray-700 border border-gray-600 text-white p-6 rounded-lg">
+                        <h4 className="font-semibold flex items-center"><i data-lucide="message-circle" className="w-5 h-5 mr-3 text-blue-400"></i>Asi me comunico: El Tono Correcto</h4>
+                        <p className="text-sm mt-2 text-gray-300">Al presentar este proyecto, mi comunicacion es directa y basada en resultados. No digo "Hice un logo bonito", digo "Diseñe un sistema visual que resolvio un problema de negocio y genero un 40% mas de ventas". Me posiciono como un socio estrategico. El tono es profesional, seguro y siempre enfocado en el valor que aporte al cliente.</p>
+                    </div>
+                </div>
+            </section>
+            
+            {/* SECCIÓN: COMUNICACIÓN CON EL CLIENTE */}
+            <section id="comunicacion" className="py-20 px-6 bg-white border-y border-gray-200">
+                <div className="max-w-4xl mx-auto">
+                    <div className="text-center mb-16">
+                        <h2 className="text-4xl font-bold font-serif mb-4">El Arte de la Comunicacion con el Cliente</h2>
+                        <p className="text-lg text-gray-600">Tu habilidad para comunicarte es tan importante como tu habilidad para diseñar. Domina estas 5 fases.</p>
+                    </div>
+                    <div className="space-y-10">
+                        {[
+                            { num: "01", title: "La Primera Llamada: El Descubrimiento", description: "Tu objetivo no es vender, es diagnosticar. Escucha mas de lo que hablas. Tu rol es el de un consultor, no un simple ejecutor.", questions: ["¿Cual es el mayor desafio de negocio que esperas resolver con este proyecto?", "¿Como se ve el exito para ti en 6 meses?", "¿Por que ahora? ¿Que ha cambiado?"] },
+                            { num: "02", title: "La Propuesta de Valor: El Contrato", description: "No envies un presupuesto, envia una propuesta de valor. Enmarca tu trabajo como una inversion, no un costo. Detalla el alcance, el proceso y, mas importante, los resultados esperados.", questions: ["Paquete 1: Identidad Esencial", "Paquete 2: Identidad Completa + Guia de Estilo", "Paquete 3: Sistema de Marca Total + Consultoria"] },
+                            { num: "03", title: "La Presentacion del Diseño: El Momento de la Verdad", description: "Nunca envies un diseño por email sin contexto. Presentalo. Cuenta la historia de como tus decisiones de diseño resuelven los problemas que discutieron en la primera llamada. Justifica cada elemento con estrategia.", questions: ["Recordemos el objetivo principal...", "Esta direccion visual resuelve el problema X de esta manera...", "Elegimos este color porque comunica Y, lo cual se alinea con..."] },
+                            { num: "04", title: "Manejo de Feedback: La Negociacion Creativa", description: "El feedback es un regalo, pero debes saber como gestionarlo. Escucha, entiende la preocupacion subyacente y re-enmarca la conversacion hacia el objetivo del proyecto.", questions: ["Feedback: 'No me gusta el color.' Tu respuesta: 'Entendido. ¿Que emocion o atributo de marca sientes que no estamos capturando con este color?'", "Feedback: '¿Puedes hacerme 3 opciones mas?' Tu respuesta: 'Estas dos direcciones son las que estrategicamente mejor resuelven el problema. Exploremos cual de estas se acerca mas y por que.'"] },
+                            { num: "05", title: "Entrega y Cierre: La Relacion a Largo Plazo", description: "Una entrega profesional y organizada deja una impresion duradera. Proporciona todos los archivos en carpetas claras, junto con una guia de estilo simple. Esto fomenta futuras colaboraciones.", questions: ["Carpeta 01_Logo (Archivos Vectoriales, PNGs)", "Carpeta 02_Brand_Guidelines.pdf", "Carpeta 03_Tipografias"] }
+                        ].map(step => (
+                             <div key={step.num} className="p-8 bg-gray-50 border rounded-lg">
+                                <h4 className="text-2xl font-bold font-serif mb-4"><span className="text-blue-600">{step.num}.</span> {step.title}</h4>
+                                <p className="text-gray-700 mb-4">{step.description}</p>
+                                <div className="bg-blue-50 border-l-4 border-blue-500 text-blue-800 p-4 rounded-r-lg">
+                                    <p className="font-bold text-sm">Preguntas/Frases Clave:</p>
+                                    <ul className="mt-2 text-sm list-disc list-inside space-y-1">
+                                        {step.questions.map(q => <li key={q}>{q}</li>)}
+                                    </ul>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            </section>
+            
+            {/* SECCIÓN: PLATAFORMAS Y HERRAMIENTAS */}
+            <section id="plataformas" className="py-20 px-6 bg-gray-50 border-y border-gray-200">
+                <div className="max-w-5xl mx-auto">
+                    <div className="text-center mb-16">
+                        <h2 className="text-4xl font-bold font-serif mb-4">¿Donde construir tu portafolio?</h2>
+                        <p className="text-lg text-gray-600">La plataforma que elijas define como te presentas al mundo. Cada una tiene sus fortalezas y debilidades.</p>
+                    </div>
+                    <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                        <div className="p-6 bg-white border rounded-lg"><i data-lucide="gem" className="w-8 h-8 mb-3 text-blue-600"></i><h4 className="font-semibold mb-2">Behance</h4><p className="text-sm text-gray-600"><strong>Ideal para:</strong> Estudios de caso detallados. <strong>Pros:</strong> Gran comunidad, excelente para mostrar el proceso completo. <strong>Contras:</strong> Menos personalizable.</p></div>
+                        <div className="p-6 bg-white border rounded-lg"><i data-lucide="dribbble" className="w-8 h-8 mb-3 text-pink-500"></i><h4 className="font-semibold mb-2">Dribbble</h4><p className="text-sm text-gray-600"><strong>Ideal para:</strong> Diseñadores de UI y animadores. <strong>Pros:</strong> Enfocado en "shots" visuales rapidos, bueno para conseguir trabajo rapido. <strong>Contras:</strong> No es ideal para mostrar estrategia.</p></div>
+                        <div className="p-6 bg-white border rounded-lg"><i data-lucide="globe" className="w-8 h-8 mb-3 text-green-600"></i><h4 className="font-semibold mb-2">Sitio Web Propio</h4><p className="text-sm text-gray-600"><strong>Ideal para:</strong> Profesionales establecidos. <strong>Pros:</strong> Control creativo total, maximo profesionalismo. <strong>Contras:</strong> Requiere mas tiempo y recursos (ej. Webflow, Framer, Semplice).</p></div>
+                    </div>
+                    <div className="mt-12 bg-blue-50 border border-blue-200 text-blue-800 p-6 rounded-lg">
+                        <h4 className="font-semibold flex items-center"><i data-lucide="lightbulb" className="w-5 h-5 mr-3"></i>Como Hacerlo: Mi Recomendacion</h4>
+                        <p className="text-sm mt-2">Empieza con Behance para desarrollar tus estudios de caso en profundidad. Usa Dribbble para compartir pequeños "shots" atractivos de tus proyectos que enlacen a tu Behance. Cuando tengas 3-5 estudios de caso solidos, invierte en construir tu propio sitio web para presentarte como un profesional de primer nivel.</p>
+                    </div>
+                </div>
+            </section>
+
+             {/* SECCIÓN: MOCKUPS Y FOTOGRAFÍA */}
+            <section id="mockups" className="py-20 px-6 bg-white border-y border-gray-200">
+                <div className="max-w-4xl mx-auto">
+                    <div className="text-center mb-12">
+                        <h2 className="text-4xl font-bold font-serif mb-4">Presentando tu Trabajo</h2>
+                        <p className="text-lg text-gray-600">Los mockups y la fotografia de alta calidad hacen que tu trabajo se sienta real y tangible, ayudando al cliente a visualizar el resultado final.</p>
+                    </div>
+                    <div className="grid md:grid-cols-2 gap-8">
+                        <div className="p-6 bg-gray-50 border rounded-lg"><h4 className="font-semibold text-lg mb-2">El Arte de los Mockups</h4><p className="text-sm text-gray-600">Usa mockups que se alineen con la calidad y el estilo de la marca que disenaste. Un diseno de lujo no puede ir en un mockup gratuito y generico. Invierte en mockups premium o crea los tuyos propios. La clave es el contexto y el realismo.</p></div>
+                        <div className="p-6 bg-gray-50 border rounded-lg"><h4 className="font-semibold text-lg mb-2">Fotografia de Producto</h4><p className="text-sm text-gray-600">Si tu proyecto incluye packaging o productos fisicos, una buena fotografia es innegociable. Contrata a un fotografo o aprende los fundamentos de la fotografia de producto. La iluminacion, la composicion y el estilismo son cruciales.</p></div>
+                    </div>
+                    <div className="mt-12 bg-yellow-50 border border-yellow-200 text-yellow-800 p-6 rounded-lg">
+                        <h4 className="font-semibold flex items-center"><i data-lucide="camera" className="w-5 h-5 mr-3"></i>Referencias: Recursos de Mockups</h4>
+                        <p className="text-sm mt-2"><strong>Premium:</strong> Envato Elements, Yellow Images, Artboard Studio.</p>
+                        <p className="text-sm mt-1"><strong>Gratuitos de Alta Calidad:</strong> Unblast, Pixeden, Mockupworld.</p>
+                    </div>
+                </div>
+            </section>
+
+            {/* SECCIÓN: PROMOCIÓN Y NETWORKING */}
+            <section id="promocion" className="py-20 px-6">
+                <div className="max-w-4xl mx-auto">
+                    <div className="text-center mb-12">
+                        <h2 className="text-4xl font-bold font-serif mb-4">Haz que te Encuentren</h2>
+                        <p className="text-lg text-gray-600">Un gran portafolio no sirve de nada si nadie lo ve. La promocion activa es parte del trabajo.</p>
+                    </div>
+                    <div className="space-y-6">
+                        <div className="p-6 bg-white border rounded-lg"><h4 className="font-semibold text-lg mb-2">Optimiza tu LinkedIn</h4><p className="text-sm text-gray-600">Tu perfil de LinkedIn debe reflejar tu PUV. Usa tu banner para mostrar tu mejor trabajo. Publica tus estudios de caso como articulos. Conecta de forma proactiva con reclutadores y directores de arte de las empresas en las que quieres trabajar.</p></div>
+                        <div className="p-6 bg-white border rounded-lg"><h4 className="font-semibold text-lg mb-2">Comparte tu Proceso</h4><p className="text-sm text-gray-600">Usa Instagram, X o Dribbble para compartir no solo el resultado final, sino tambien bocetos, ideas descartadas y el "detras de camaras" de tu proceso. Esto te posiciona como un experto y atrae a una audiencia interesada en tu trabajo.</p></div>
+                        <div className="p-6 bg-white border rounded-lg"><h4 className="font-semibold text-lg mb-2">Networking Genuino</h4><p className="text-sm text-gray-600">Participa en eventos de diseno (online o presenciales). Comenta de forma constructiva el trabajo de otros disenadores. Ofrece ayuda. La mejor manera de recibir oportunidades es siendo una parte activa y generosa de la comunidad.</p></div>
+                    </div>
+                </div>
+            </section>
+
+          </main>
+
+          <footer className="bg-white py-12 px-6 border-t border-gray-200 mt-20">
+            <div className="max-w-7xl mx-auto text-center">
+              <h4 className="text-2xl font-bold font-serif mb-2">Portfolio Architect</h4>
+              <p className="text-gray-500 text-sm">Diseñado para ayudarte a construir tu futuro profesional.</p>
+            </div>
+          </footer>
+        </div>
+      );
+    };
+
+    // =============== RENDERIZAR LA APP ===============
+    ReactDOM.createRoot(document.getElementById('root')).render(<BrandingProApp />);
+  </script>
+</body>
+</html>
